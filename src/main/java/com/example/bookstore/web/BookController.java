@@ -1,7 +1,5 @@
 package com.example.bookstore.web;
 
-
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,17 +10,15 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.example.bookstore.model.Book;
 import com.example.bookstore.model.BookRepository;
-
-
-
-
-
-
+import com.example.bookstore.model.CategoryRepository;
 
 @Controller
 public class BookController {
 	@Autowired
 	private BookRepository repository;
+	
+	@Autowired
+	private CategoryRepository crepository;
 	
 	@RequestMapping("/index")
 	public String book() {
@@ -44,6 +40,7 @@ public class BookController {
 	@RequestMapping(value = "/add")
     public String addBook(Model model){
     	model.addAttribute("book", new Book());
+    	model.addAttribute("categories", crepository.findAll());
         return "addbook";
     } 
 	
@@ -57,6 +54,7 @@ public class BookController {
 	public String modifyBook(@PathVariable("id") Long bookId, Model model) {
 		//Haetaan tietokannasta sql lauseella kirja jolla on tämä id ja lisätään modeliin.
 		model.addAttribute("book", repository.findById(bookId));
+		model.addAttribute("categories", crepository.findAll());
 		return "modifybook";
 	}
 	
