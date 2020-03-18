@@ -29,11 +29,10 @@ public class BookController {
 	@Autowired
 	private CategoryRepository crepository;
 	
-	@RequestMapping("/index")
-	public String book() {
-		return "";
-	}
-	
+	@RequestMapping(value="/login")
+    public String login() {	
+        return "login";
+    }	
 	
 	@RequestMapping(value= {"/booklist"})
     public String bookList(Model model) {	
@@ -49,13 +48,6 @@ public class BookController {
     @RequestMapping(value="/book/{id}", method = RequestMethod.GET)
     public @ResponseBody Optional<Book> findStudentRest(@PathVariable("id") Long bookId) {	
     	return repository.findById(bookId);
-    }
-	
-    @PreAuthorize("hasRole('ADMIN')")
-	@RequestMapping(value = "/delete/{id}", method = RequestMethod.GET)
-    public String deleteStudent(@PathVariable("id") Long bookId, Model model) {
-    	repository.deleteById(bookId);
-        return "redirect:../booklist";
     }
 	
 	@RequestMapping(value = "/add")
@@ -79,6 +71,12 @@ public class BookController {
 		return "modifybook";
 	}
 	
+	@RequestMapping(value = "/delete/{id}", method = RequestMethod.GET)
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public String deleteStudent(@PathVariable("id") Long bookId, Model model) {
+    	repository.deleteById(bookId);
+        return "redirect:../booklist";
+    } 
 	
 
 }
